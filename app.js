@@ -2,7 +2,7 @@ const express = require('express');
 const tf = require('@tensorflow/tfjs-node');
 const multer = require('multer');
 const app = express();
-const port = 8000;
+const port = process.env.port || 8000;
 
 const upload = multer();
 
@@ -56,5 +56,5 @@ app.get('/', (req,res) =>{
 
 
 app.listen(port, () =>{
-    console.log("App Is Working");
+    console.log(`App is working and listenign to port ${port}`);
 })
