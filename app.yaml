@@ -1,2 +1,5 @@
 runtime: nodejs18
 service: api-testing
+
+env_variables:
+  Link_Bucket: "https://storage.googleapis.com/bucket-for-ml-model/model.json"
