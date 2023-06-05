@@ -6,11 +6,12 @@ const PORT = process.env.PORT || 8000;
 
 const upload = multer();
 
-app.post('/testingModel', upload.single('image'), async (req, res)=>{
+app.post('/testingModel', async (req, res)=>{
     try {
+        
         const model = await tf.loadLayersModel(process.env.Link_Bucket);
 
-         const imageBuffer = req.file.buffer;
+         const imageBuffer = req.body.imageBuffer;
          const image = tf.node.decodeImage(imageBuffer);
          const processedImage= preprocessImage(image);
          const predictions = await model.predict(processedImage).array();
