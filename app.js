@@ -6,22 +6,26 @@ const PORT = process.env.PORT || 8000;
 
 const upload = multer();
 
+app.use(express.json({limit: "20MB"}));
+app.use(express.urlencoded({extended: true}));
+
 app.post('/testingModel', async (req, res)=>{
     try {
-        
+         console.log("berhasil");
         const model = await tf.loadLayersModel(process.env.Link_Bucket);
-
-         const imageBuffer = req.body.imageBuffer;
-         const image = tf.node.decodeImage(imageBuffer);
+        const reqImage = req.body.image;
+        const decReqImage = Buffer.from(reqImage, 'base64');
+         
+         const image = tf.node.decodeImage(decReqImage);
          const processedImage= preprocessImage(image);
          const predictions = await model.predict(processedImage).array();
-         res.json({predictions});
+         res.status(200).send({predictions});
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'An error occurred' });
+        //console.log(error);
+        res.status(500).send({ error: 'An error occurred' });
         
     }
-    console.log('predictions should be working');
+    //console.log('predictions should be working');
 })
 
 function preprocessImage(image) {
@@ -47,5 +51,5 @@ app.get('/', (req,res) =>{
 
 
 app.listen(PORT, () =>{
-    console.log(`App is working and listenign to port ${PORT}`);
+    console.log(`App is working and listening to port ${PORT}`);
 })
